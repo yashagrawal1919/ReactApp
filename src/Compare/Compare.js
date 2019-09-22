@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Basic from './Basic'
 import Details from './Details'
@@ -61,7 +61,9 @@ class Compare extends Component {
           this.setState({compare: [...newValues], loading: false});
         }).catch(err => console.log(err));
     } else {
-      this.setState({loading: false});
+      setTimeout(() => {
+        this.setState({loading: false});
+      },2000)
     }
   }
 
@@ -78,7 +80,7 @@ class Compare extends Component {
         let sectors = compare.map(val => val.top_sectors);
         let returns = compare.map(val => val.best_return);
         data = (
-          <Fragment>
+          <div className="compare">
             <div className="headers">Basic Details</div>
             <Basic values={values} />
             <div className="headers">Best Returns</div>
@@ -87,7 +89,7 @@ class Compare extends Component {
             <Details type="holdings" details={holdings} />
             <div className="headers">Top 5 Sectors</div>
             <Details type="sectors" details={sectors} />
-          </Fragment>
+          </div>
         )
       } else {
         data = <h2 style={{textAlign: 'center'}}>Please add some Mutual Fund Schemes to Compare</h2>;
@@ -95,10 +97,10 @@ class Compare extends Component {
     }
 
     return (
-      <div className="compare">
+      <div className="compare-wrapper">
         <div className="all-purpose-btn">
           {clearAll ? 
-            <button onClick={this.clearAll}>Clear All</button>
+            <button onClick={this.clearAll}>Clear Compare List</button>
             : null
           }
         </div>
