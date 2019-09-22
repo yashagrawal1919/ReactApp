@@ -61,9 +61,7 @@ class Compare extends Component {
           this.setState({compare: [...newValues], loading: false});
         }).catch(err => console.log(err));
     } else {
-      setTimeout(() => {
-        this.setState({loading: false});
-      },2000)
+      this.setState({loading: false});
     }
   }
 
