@@ -7,11 +7,11 @@ import Navbar from './Navbar'
 class App extends Component {
   render() {
     return (
-      <BrowserRouter basename="/ReactApp">
+      <BrowserRouter>
         <Navbar />
         <div>
-          <Route path='/' component={Display} exact />
-          <Route path='/compare' component={Compare} />
+          <Route path='/ReactApp' component={Display} exact />
+          <Route path='/ReactApp/compare' component={Compare} />
         </div>
       </BrowserRouter>
     )
