@@ -7,7 +7,7 @@ import Navbar from './Navbar'
 class App extends Component {
   render() {
     return (
-      <BrowserRouter>
+      <BrowserRouter basename="/ReactApp">
         <Navbar />
         <div>
           <Route path='/' component={Display} exact />
