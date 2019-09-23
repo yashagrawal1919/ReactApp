@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Form from './Form'
 import Accordion from './Accordion'
+import Loader from '../Loader'
 
 class Display extends Component {
   state = {
@@ -9,7 +10,14 @@ class Display extends Component {
     selected: [...this.props.selected],
     count: 0,
     num: 10,
-    error: null
+    error: null,
+    loading: false
+  }
+
+  clearErrorMsg = () => {
+    setTimeout(() => {
+      this.setState({error: null});
+    }, 3000);
   }
 
   clearAll = () => {
@@ -56,6 +64,11 @@ class Display extends Component {
       offset: 1
     };
 
+    this.setState({
+      error: null,
+      loading: true
+    });
+
     fetch('https://api.piggy.co.in/v2/mf/search/', {
       method: 'POST',
       authorization: 'a41d2b39e3b47412504509bb5a1b66498fb1f43a',
@@ -73,19 +86,32 @@ class Display extends Component {
             open: false
           }
         });
-
-        this.setState({
-          data: [...search_results],
-          count: search_results.length,
-          num: 10,
-        });
+        
+        if(search_results.length === 0) {
+          this.setState({
+            data: [],
+            count: 0,
+            error: 'No Results Found',
+            num: 10,
+            loading: false
+          });
+          this.clearErrorMsg();
+        } else {
+          this.setState({
+            data: [...search_results],
+            count: search_results.length,
+            num: 10,
+            loading: false
+          });
+        }
       })
       .catch(err => {
         console.log(err)
-        this.setState({error: err.message});
-        setTimeout(() => {
-          this.setState({error: null});
-        }, 3000);
+        this.setState({
+          error: 'Some Error Occured, please try again after refreshing',
+          loading: false
+        });
+        this.clearErrorMsg();
       });
   }
 
@@ -111,7 +137,7 @@ class Display extends Component {
   }
 
   render() {
-    const { data, num, selected, count, error } = this.state;
+    const { data, num, selected, count, error, loading } = this.state;
     let output = [...data];
     output = output.splice(0,num);
 
@@ -146,10 +172,11 @@ class Display extends Component {
     return (
       <div>
         <Form />
-        {errorMsg}
         <div className="all-purpose-btn">
           <button disabled={!clearAll} onClick={this.clearAll}>Clear Compare List</button>
         </div>
+        {loading ? <Loader /> : null}
+        {errorMsg}
         <div className="display">
           {output}
         </div>

@@ -262,6 +262,7 @@
   padding: 0px;
   cursor: pointer;
   font-weight: bold;
+  outline: none;
 }
 
 /* Loader Animation */
